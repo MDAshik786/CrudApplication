@@ -115,7 +115,7 @@ const Login = ({ logIdn, setlogIdn }) => {
             <div className="button-class">
               <button className="login-button">LOGIN</button>
               <p className="not-register">
-                Not Registered?/<span className="sing-up"onClick={moveToFromPage}>Sing Up</span>
+                Not Registered?/<span className="sign-up"onClick={moveToFromPage}>Sign Up</span>
               </p>
             </div>
           </div>

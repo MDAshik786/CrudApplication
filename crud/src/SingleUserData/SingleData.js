@@ -11,8 +11,8 @@ const SingleData = () => {
   const nevigate = useNavigate();
   let singleData = location.state 
   const single = singleData
-   const loginId = singleData.loginId;
-console.log(singleData.singleData,"location")
+   const loginId = location.state.loginId;
+console.log(singleData,"location")
 
    const [deletBollean,  setdeletBollean] = useState(false);
   function toGetDateAndTime(currentDate) {
@@ -32,22 +32,24 @@ console.log(singleData.singleData,"location")
   }
   function CancelConfirm(){
     console.log(loginId,"logindelete")
-    !loginId ? nevigate ("/") :
-    nevigate("/display");
+    loginId ? nevigate ("/display",{state:{loginId:loginId}}) :
+    nevigate("/",{state:{loginId:loginId}});
   }
   function editConfirm(){
-    nevigate("/additem", { state: { single} });
+    nevigate("/additem", { state: {singleData,loginId} });
   }
   function  deleteValue(){
      setdeletBollean(true)
 
   }
   function resetHomePage(){
-    nevigate('/')
+    loginId ? nevigate ("/display",{state:{loginId:loginId}}) :
+    nevigate("/",{state:{loginId:loginId}});
   }
   const deleteConfirmation = async (id) => {
     await axios.delete(`${apiUrl}/${id}`);
-    nevigate('/')
+    loginId ? nevigate ("/display",{state:{loginId:loginId}}) :
+    nevigate("/",{state:{loginId:loginId}});
   };
 
   return (
@@ -66,7 +68,7 @@ console.log(singleData.singleData,"location")
             </button>
             <button
               type="reset"
-               onClick={() => deleteConfirmation(singleData.id)}
+               onClick={() => deleteConfirmation(singleData?.singleData?.id)}
               className="submite-button1"
             >
               Delete
@@ -77,30 +79,30 @@ console.log(singleData.singleData,"location")
         <div className='main-container'>
 
         <div className='sub-container'>
-          <p className='heading'><span className='inner-name'>{singleData?.fn} {singleData?.ln}</span>'s Details</p>
+          <p className='heading'><span className='inner-name'>{singleData?.singleData?.fn} {singleData?.singleData?.ln}</span>'s Details</p>
         <div className='container'>
           <p className='head1'>User Id:</p>
-          <p className='content1'>{singleData.id}</p>
+          <p className='content1'>{singleData?.singleData?.id}</p>
         </div>
         <div className='container'>
           <p className='head1'>Email:</p>
-          <p className='content1'>{singleData.email}</p>
+          <p className='content1'>{singleData?.singleData?.email}</p>
         </div>
         <div className='container'>
           <p className='head1'>First Name:</p>
-          <p className='content1'>{singleData.fn}</p>
+          <p className='content1'>{singleData?.singleData?.fn}</p>
         </div>
         <div className='container'>
           <p className='head1'>Last Name:</p>
-          <p className='content1'>{singleData.ln}</p>
+          <p className='content1'>{singleData?.singleData?.ln}</p>
         </div>
         <div className='container'>
           <p className='head1'>Phone Number:</p>
-          <p className='content1'>{singleData.id}</p>
+          <p className='content1'>{singleData?.singleData?.id}</p>
         </div>
         <div className='container'>
           <p className='head1'>Address:</p>
-          <p className='content1'>{singleData.address}</p>
+          <p className='content1'>{singleData?.singleData?.address}</p>
         </div>
         <div className='container'>
           <p className='head1'>Created Date & Time:</p>

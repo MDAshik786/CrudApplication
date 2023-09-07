@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import "./Display.css";
 import axios from "axios";
 import { apiUrl } from "../Constrains/URL";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ToptoBottom from "./ToptoBottom";
 import SearchBar from "../SearchBar/SearchBar.js";
 import BottomtoTop from "./BottomtoTop";
 
-const Display = ({logIdn}) => {
+const Display = () => {
   const [apiData, setapiData] = useState("");
   const [search, setSearch] = useState("");
   const [Deleteid, setDeleteid] = useState("");
   const [arrow, setarrow] = useState(true);
-
-
+  const location = useLocation();
+  const loginId = location.state.loginId
+  console.log(location.state,"location")
   const callApiDataa = async () => {
     const data = await axios.get(apiUrl);
     setapiData(data.data);
@@ -50,7 +51,7 @@ const Display = ({logIdn}) => {
 
   const editValue = async (single) => {
     console.log(single, "single");
-    nevigate("/additem", { state: { single } });
+    nevigate("/additem", { state: { single,loginId:loginId } });
   };
 
   function arrowFunction() {
@@ -96,7 +97,7 @@ const Display = ({logIdn}) => {
   }
 
   function moveToSingleData(single) {
-    nevigate("/single", { state: single });
+    nevigate("/single", { state: {singleData:single,loginId:loginId} });
   }
 
   function toGetDateAndTime(currentDate) {

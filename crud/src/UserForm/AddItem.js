@@ -72,15 +72,16 @@ const AddItem = ({logIdn}) => {
   }, []);
   console.log(location.state?.loginId,"locatttt")
   useEffect(() => {
-    if ((location.state.single)) {
+    if ((location.state.single || location.state.singleData)) {
       const array = location.state;
+      console.log(location.state.single,location.state,"daaaaa")
       setFormData({
-        email: array?.single?.email,
-        fn: array.single?.fn,
-        ln: array.single?.ln,
-        dob: array.single?.dob,
-        phone: array.single?.phone,
-        address: array.single?.address,
+        email: array.single ? array?.single?.email : array?.singleData?.singleData?.email,
+        fn: array.single ? array?.single?.fn : array?.singleData?.singleData?.fn,
+        ln: array.single ? array?.single?.ln : array?.singleData?.singleData?.ln,
+        dob: array.single ? array?.single?.dob : array?.singleData?.singleData?.dob,
+        phone: array.single ? array?.single?.phone : array?.singleData?.singleData?.phone,
+        address: array.single ? array?.single?.address : array?.singleData?.singleData?.address,
       });
     }
   }, []);
@@ -166,10 +167,12 @@ const AddItem = ({logIdn}) => {
     setError(error);
 
     if (emptyRequirement && validOrNot && allreadyExist) {
-      if (!data.single) {
+      if (!data.single && !data.singleData) {
         setAllValue();
       } else {
-        editUserDetails(data.single.id);
+        const id = (data?.single) ? data?.single?.id : data?.singleData.singleData.id
+        console.log(id,"id")
+        editUserDetails(id);
       }
     }
   };
@@ -195,6 +198,12 @@ const AddItem = ({logIdn}) => {
     
   };
   console.log(data, "first");
+  const getEditSingleData = async (email) => {
+    const response = await axios.get(`${apiUrl}/identify/${email}`);
+    console.log(response.data,"editrs")
+    navigate("/single", { state: { singleData: response.data, loginId: loginId } })
+     return response.data
+  }
   const editUserDetails = async (id) => {
     try {
       const response = await axios.put(`${apiUrl}/${id}`, {
@@ -205,7 +214,7 @@ const AddItem = ({logIdn}) => {
         address: formData.address,
         phone: formData.phone,
       });
-      console.log(response.data, "error");
+      console.log(response.data, "errorrrrrrr");
       if (response.data === false) {
         console.log(response.data, "=---error");
         setError((prevState) => ({
@@ -218,7 +227,13 @@ const AddItem = ({logIdn}) => {
           email: "",
         }));
       }
-      navigate("/");
+      if(loginId){
+        navigate("/display",{state:{logIdn:loginId}})
+      }
+      else{
+        getEditSingleData(formData.email)
+      }
+      loginId ? navigate("/display",{state:{logIdn:loginId}}) : navigate("/single",{state:{logIdn:loginId}});
     } catch (error) {
       console.error("Error updating user details:", error);
     }
@@ -235,7 +250,7 @@ const AddItem = ({logIdn}) => {
     });
   }
   function Cancel() {
-    logIdn ? navigate("/display") : navigate("/")
+    logIdn ? navigate("/display",{state:{loginId:loginId}}) : navigate("/",{state:{loginId:loginId}})
   }
   console.log(Error, "error");
   return (
