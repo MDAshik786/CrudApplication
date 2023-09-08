@@ -10,7 +10,9 @@
       -o-background-size: cover;
       background-size: cover;
   }
-  
+  .error-msg{
+     padding-top: 0.1rem; 
+  }
   .form-data {
     display: flex;
     justify-content: center;

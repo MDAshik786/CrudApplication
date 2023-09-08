@@ -13,11 +13,8 @@ import {
 } from "../Validation/Regex";
 import "./FormMQ.css";
 
-const AddItem = ({logIdn}) => {
-  const [validEmail, setEmail] = useState({
-    email: "",
-    value: "",
-  });
+const AddItem = () => {
+  const [validEmail, setValidEmail] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const loginId = location.state?.loginId;
@@ -48,6 +45,7 @@ const AddItem = ({logIdn}) => {
 
   const [formData, setFormData] = useState({
     email: "",
+    password:"",
     fn: "",
     ln: "",
     dob: "",
@@ -77,6 +75,7 @@ const AddItem = ({logIdn}) => {
       console.log(location.state.single,location.state,"daaaaa")
       setFormData({
         email: array.single ? array?.single?.email : array?.singleData?.singleData?.email,
+        password: array.single ? array?.single?.password : array?.singleData?.singleData?.password,
         fn: array.single ? array?.single?.fn : array?.singleData?.singleData?.fn,
         ln: array.single ? array?.single?.ln : array?.singleData?.singleData?.ln,
         dob: array.single ? array?.single?.dob : array?.singleData?.singleData?.dob,
@@ -129,6 +128,10 @@ const AddItem = ({logIdn}) => {
       error.email = "Please Enter a Valid Email";
       validOrNot = false;
     }
+    if (formData.password === "") {
+      error.password = "Password is Required";
+      emptyRequirement = false;
+    } 
     if (formData.fn === "") {
       error.fn = "First Name is Required";
       emptyRequirement = false;
@@ -144,7 +147,10 @@ const AddItem = ({logIdn}) => {
       error.ln = "Please Enter a Valid Last Name";
       validOrNot = false;
     }
-
+    if (formData.dob === "") {
+      error.dob = "DOB is Required";
+      emptyRequirement = false;
+    }
     if (formData.phone === "") {
       error.phone = "Phone Number is Required";
       emptyRequirement = false;
@@ -163,10 +169,14 @@ const AddItem = ({logIdn}) => {
       error.address = "Character Limit is 50 only";
       validOrNot = false;
     }
+    setError((prevState) => ({
+      ...prevState,
+      error
+      
+    }));
 
-    setError(error);
 
-    if (emptyRequirement && validOrNot && allreadyExist) {
+    if (emptyRequirement && validOrNot && allreadyExist && validEmail) {
       if (!data.single && !data.singleData) {
         setAllValue();
       } else {
@@ -185,13 +195,14 @@ const AddItem = ({logIdn}) => {
   const setAllValue = async () => {
     await axios.post(apiUrl, {
       email: formData.email,
+      password:formData.password,
       fn: formData.fn,
       ln: formData.ln,
       dob: formData.dob,
       phone: formData.phone,
       address: formData.address,
     });
-    !logIdn ? getSingleData(formData.email) : navigate("/display")
+    !loginId ? getSingleData(formData.email) : navigate("/display",{state:{loginId}})
     console.log(`${apiUrl}/${formData.email}`)
   
     console.log("Added");
@@ -200,21 +211,23 @@ const AddItem = ({logIdn}) => {
   console.log(data, "first");
   const getEditSingleData = async (email) => {
     const response = await axios.get(`${apiUrl}/identify/${email}`);
-    console.log(response.data,"editrs")
+    console.log(response.data,"editrs------")
     navigate("/single", { state: { singleData: response.data, loginId: loginId } })
      return response.data
   }
   const editUserDetails = async (id) => {
     try {
+      console.log("new edit",formData);
       const response = await axios.put(`${apiUrl}/${id}`, {
         email: formData.email,
+        password : formData.password,
         fn: formData.fn,
         ln: formData.ln,
         dob: formData.dob,
         address: formData.address,
         phone: formData.phone,
       });
-      console.log(response.data, "errorrrrrrr");
+      console.log(response.data, "edit----");
       if (response.data === false) {
         console.log(response.data, "=---error");
         setError((prevState) => ({
@@ -228,12 +241,12 @@ const AddItem = ({logIdn}) => {
         }));
       }
       if(loginId){
-        navigate("/display",{state:{logIdn:loginId}})
+        navigate("/display",{state:{loginId:loginId}})
       }
       else{
         getEditSingleData(formData.email)
       }
-      loginId ? navigate("/display",{state:{logIdn:loginId}}) : navigate("/single",{state:{logIdn:loginId}});
+      loginId ? navigate("/display",{state:{loginId:loginId}}) : navigate("/single",{state:{loginId:loginId}});
     } catch (error) {
       console.error("Error updating user details:", error);
     }
@@ -242,6 +255,7 @@ const AddItem = ({logIdn}) => {
   function clearAllData() {
     setFormData({
       email: "",
+      password:"",
       fn: "",
       ln: "",
       dob: "",
@@ -250,9 +264,22 @@ const AddItem = ({logIdn}) => {
     });
   }
   function Cancel() {
-    logIdn ? navigate("/display",{state:{loginId:loginId}}) : navigate("/",{state:{loginId:loginId}})
+    console.log(location.state.singleData,"singledata")
+    if(loginId)
+    navigate("/display",{state:{loginId:loginId}})
+  else {
+    console.log(location.state?.singleData,"ashikkkkk")
+    if(location.state.singleData){
+    console.log(location.state?.singleData,"ashik")
+    navigate("/single",{state:{singleData:location.state.singleData.singleData,loginId}})
+    }
+  else 
+  navigate("/")
+  }
+    
   }
   console.log(Error, "error");
+  console.log(validEmail,"validEamil")
   return (
     <main className="main">
       <MainLayout>
@@ -266,6 +293,7 @@ const AddItem = ({logIdn}) => {
           currentDate1={currentDate1}
           data={data}
           setError={setError}
+          setValidEmail = {setValidEmail}
         />
       </MainLayout>
     </main>

@@ -9,6 +9,8 @@ import { BsEyeSlashFill } from "react-icons/bs";
 
 
 const Login = ({ logIdn, setlogIdn }) => {
+  const [loginError, setLoginError] = useState({
+  });
   const [visible, setVisible] = useState(false);
   const [login, setlogin] = useState({
     email: "",
@@ -28,11 +30,24 @@ const Login = ({ logIdn, setlogIdn }) => {
           },
         }
       );
-
+      console.log(responseLogin.data,"tttttttttttt")
       if (responseLogin.data === "admin") {
         setlogIdn(true);
         navigate("/display",{state:{loginId:true}});
       }
+      else if(responseLogin.data === 'Incorrect Password')
+      setLoginError((loginError) => ({
+    ...loginError,
+      "password" :responseLogin.data,
+    }))
+    else if(responseLogin.data === 'Incorrect Password' || responseLogin.data === 'Invalid User')
+    setLoginError((loginError) => ({
+  ...loginError,
+    "password" :responseLogin.data,
+  }))
+  else{
+    navigate('/single',{state:{singleData:responseLogin.data,loginId:false}})
+  }
       return responseLogin.data;
     } catch (error) {
       console.log(error);
@@ -45,8 +60,13 @@ const Login = ({ logIdn, setlogIdn }) => {
     const { name, value } = e.target;
     setlogin((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value, 
     }));
+    setLoginError((prevState) => {
+      const updateData = prevState ? { ...prevState } : {};
+      updateData[name] = "";
+      return updateData;
+    });
   }
   function loginForm(e) {
     e.preventDefault();
@@ -55,7 +75,7 @@ const Login = ({ logIdn, setlogIdn }) => {
       Required = false;
       errorValidation.email = "Email is Required";
     }
-    if (Required && !emailRegex.test(login.email)) {
+   else if (Required && !emailRegex.test(login.email)) {
       Incorrect = false;
       errorValidation.email = "Invalid Email";
     }
@@ -64,7 +84,15 @@ const Login = ({ logIdn, setlogIdn }) => {
       console.log("Password is Required");
       errorValidation.password = "Password Required";
     }
-    if (Required && Incorrect) userLogin(login.email, login.password);
+    setLoginError((loginError) => ({
+      ["email"]: errorValidation.email,
+      ["password"]: errorValidation.password,
+    }) )
+     
+    if (Required && Incorrect){
+     userLogin(login.email, login.password);
+     
+    }
   }
   function moveToFromPage() {
     setlogIdn(false);
@@ -73,7 +101,7 @@ const Login = ({ logIdn, setlogIdn }) => {
   function visibleHandeler() {
     setVisible(!visible);
   }
-
+  console.log(loginError,"loginError---")
   console.log(logIdn, "logii");
   return (
     <div className="main-form">
@@ -94,6 +122,7 @@ const Login = ({ logIdn, setlogIdn }) => {
                 onChange={handelLoginForm}
                 name="email"
               ></input>
+              <p className="error-message">{loginError?.email}</p>
             </div>
             <div className="relative">
               <input
@@ -106,6 +135,7 @@ const Login = ({ logIdn, setlogIdn }) => {
                 onChange={handelLoginForm}
                 autoComplete="off"
               ></input>
+              <p className="error-message">{loginError?.password}</p>
               {visible ? (
                 <BiSolidShow className="view-icon1" onClick={visibleHandeler} />
               ) : (

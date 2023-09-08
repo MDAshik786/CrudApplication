@@ -13,8 +13,8 @@ const Display = () => {
   const [Deleteid, setDeleteid] = useState("");
   const [arrow, setarrow] = useState(true);
   const location = useLocation();
-  const loginId = location.state.loginId
-  console.log(location.state,"location")
+  const loginId = location?.state?.loginId
+  console.log(location.state,location.state.loginId,"location")
   const callApiDataa = async () => {
     const data = await axios.get(apiUrl);
     setapiData(data.data);

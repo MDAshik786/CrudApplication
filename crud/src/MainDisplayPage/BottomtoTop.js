@@ -16,7 +16,6 @@ const BottomtoTop = ({
   toGetDateAndTime
 }) => {
   return (
-    //formatDate(single.dob)
     <div className="maindis">
       <table className="content-table">
         <thead>
@@ -48,7 +47,7 @@ const BottomtoTop = ({
                 <td className="heading-child">{single.email}</td>
                 <td className="heading-child">{single.fn}</td>
                 <td className="heading-child">{single.ln}</td>
-                <td className="heading-child">{}</td>
+                <td className="heading-child">{formatDate(single.dob)}</td>
                 <td className="heading-child">{single.phone}</td>
                 <td className="heading-child">
                   {toGetDateAndTime(single.currDate).istDate   }

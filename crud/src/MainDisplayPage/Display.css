@@ -8,14 +8,15 @@
     
   }
   .main-con{
-
     padding: 0 7rem;
+    background-image: url(/public/images/white-gray-geometric-pattern-background-vector_53876-170008.avif);
+    background-size: cover;
+    height: 100vh;
   }
   .maindis{
  
    gap: 2rem;
     padding: 3rem ;
-    background-color: whitesmoke;
     border-radius: 2rem;
   }
   .heading-child1{
@@ -30,7 +31,7 @@
    .content-table th{
     padding: 1rem 3rem;
     background-color: rgb(219, 212, 212);
-    border: 2px solid #100f0f;
+    border: 1px solid gray  ;
     text-align:center;
     font-family: "Roboto", sans-serif;
     font-weight: 700;
@@ -39,7 +40,7 @@
   
   .content-table td {
     padding: 0.8rem 0.3rem;
-    border: 2px solid #100f0f;
+    border: 1px solid gray;
     text-align:center;
     font-size: 1.2rem;
     background-color: white;

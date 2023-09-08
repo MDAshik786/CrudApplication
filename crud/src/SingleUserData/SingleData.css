@@ -1,14 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Headland+One&family=Open+Sans&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
-
-
+/* #360033  #0b8793 */
+.div{
+    background-image: linear-gradient(
+        to right,
+        #0b8793,
+        rgba(185, 0, 255, 0.5)
+      ),
+      url("/public/images/download.jpeg");
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      
+    height: 100vh;
+}
 .main-container {
 
-    background-image: linear-gradient(#360033, #0b8793);
+   
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    padding-top: 1rem;
+    
 }
 
 .sub-container {
@@ -18,42 +31,44 @@
     flex-direction: column;
     align-items: center;
     width: 40%;
-    gap: 2rem;
+    gap: 1.5rem;
     box-shadow: #e1adde 10px 30px 60px -12px inset,
         #0b8793 0px 18px 36px -18px inset;
    
 }
 
 .container {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-family: "Roboto", sans-serif;
     display: grid;
     grid-template-columns: 19rem 1fr;
     width: 95%;
-    /* margin: 0 4rem 0 3rem; */
+    height: auto;
     padding: 0.5rem 3rem;
     background-color:#e3f2f4;
-    align-items: center;
+    align-items: start;
     white-space: nowrap;
     border-radius: 1rem;
 }
 
 .heading {
    
-    padding: 3rem 2rem 2rem 0;
+    padding: 2rem 2rem 2rem 0;
     font: 2.4rem 'Headland One', serif;
     
 }
 
 .content1 {
-    padding-right: 2rem;
+    padding: 0 2rem 0 3rem;
+    text-align: start;
 }
 
 .head1 {
-    font-weight: bolder;
-    font: 1.5rem 'Headland One', serif;
+    font-weight: bold;
+    font: 1.3rem 'Headland One', serif;
     white-space: nowrap;
-    
+    text-align: start;
+    padding-left: 4rem;
 }
 
 .delete-container1 {
@@ -68,15 +83,15 @@
 
 .contents,.content {
     font: 1.5rem 'Headland One', serif;
-    text-align: center;
-    padding-top: 3rem;
+    text-align: start;
+    padding-top: 1rem;
 }
 
 .buttons {
-    padding: 2rem 0 4rem 0;
+    padding: 2rem 0 3rem 0;
 }
 .submite-button3{
-    background-color:rgb(238, 118, 118);
+    background-color:#50d2de;
 }
 .inner-name{
     color: #360033;

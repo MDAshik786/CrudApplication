@@ -1,8 +1,10 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { MdOutlineCancel } from "react-icons/md";
 import { apiUrl } from "../Constrains/URL";
+import { BiSolidShow } from "react-icons/bi";
+import { BsEyeSlashFill } from "react-icons/bs";
 
 const Form = ({
   formData,
@@ -14,7 +16,10 @@ const Form = ({
   data,
   currentDate1,
   setError,
+  setValidEmail
 }) => {
+  const [visible, setVisible] = useState(false);
+
   const EmailValidation = async (email) => {
     try {
       const response = await axios.post(`${apiUrl}/email/${email}`, email);
@@ -24,11 +29,13 @@ const Form = ({
           ...prevState,
           email: "Email is Already Exists",
         }));
+        setValidEmail(false)
       } else {
         setError((prevState) => ({
           ...prevState,
           email: "",
         }));
+        setValidEmail(true)
       }
 
       return response.data;
@@ -36,6 +43,9 @@ const Form = ({
       console.error(error);
     }
   };
+  function visibleHandeler() {
+    setVisible(!visible);
+  }
 
   const editEmailValidation = async (id, email) => {
     console.log(`${apiUrl}/${id}/${email}`);
@@ -49,12 +59,14 @@ const Form = ({
           ...prevState,
           email: "Email is Already Exists",
         }));
+        setValidEmail(false)
       } else {
         console.log(editresponse.data, "--->>>");
         setError((prevState) => ({
           ...prevState,
           email: "",
         }));
+        setValidEmail(true);
       }
 
       return editresponse.data;
@@ -62,7 +74,9 @@ const Form = ({
       console.error(error);
     }
   };
-
+  let id;
+  if(data.single || data.singleData)
+   id = data.single ? data.single.id : data.singleData.id
   return (
     <div>
       <form onSubmit={submitAllData}>
@@ -81,10 +95,10 @@ const Form = ({
                   data-testid="email-id"
                   onChange={handleInputChange}
                   onBlur={
-                    !data.single
-                      ? () => EmailValidation(formData?.email)
+                    (data.single || data.singleData) 
+                      ? () => editEmailValidation(id, formData?.email)
                       : () =>
-                          editEmailValidation(data.single.id, formData?.email)
+                      EmailValidation(formData?.email)
                   }
                 />
                 {Error?.email && (
@@ -94,6 +108,29 @@ const Form = ({
                   >
                     {Error?.email}
                     <BsFillInfoCircleFill className="info-icon" />
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="single-container">
+              <label className="input-name">Password:</label>
+              <div className="relative">
+                <input
+                    type={visible ? "text" : "password"}
+                  className="first-name"
+                  placeholder="Enter Your First Name"
+                  value={formData?.password}
+                  name="password"
+                  data-testid="password-id"
+                  onChange={handleInputChange}
+                />
+                 {visible ? (
+                <BiSolidShow className="view1" onClick={visibleHandeler} />
+              ) : (
+                <BsEyeSlashFill className="view1" onClick={visibleHandeler} />
+              )}
+                {Error?.password && (
+                  <p style={{ color: "red", font: "1rem Roboto, sans-serif" }}>
                   </p>
                 )}
               </div>
@@ -151,8 +188,6 @@ const Form = ({
                 />
                 {Error?.dob && (
                   <p style={{ color: "red", font: "1rem Roboto, sans-serif" }}>
-                    {Error?.dob}
-                    <BsFillInfoCircleFill className="info-icon" />
                   </p>
                 )}
               </div>
@@ -210,7 +245,7 @@ const Form = ({
                 className="submite-button"
                 data-testid="submit"
               >
-                {!data.single ? "Submit" : "Edit Data"}
+                {(data.single || data.singleData) ? "Edit Data" : "submit"}
               </button>
             </div>
             <button className="cancel-button">
