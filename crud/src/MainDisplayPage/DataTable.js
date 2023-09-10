@@ -5,7 +5,7 @@ import { BsFillArrowUpSquareFill } from "react-icons/bs";
 import { BsFillArrowDownSquareFill } from "react-icons/bs";
 import { BiShowAlt } from "react-icons/bi";
 
-const BottomtoTop = ({
+const DataTable = ({
   lastTenApiData,
   editValue,
   deleteStart,
@@ -13,7 +13,7 @@ const BottomtoTop = ({
   moveToSingleData,
   arrow,
   arrowFunction,
-  toGetDateAndTime
+  toGetDateAndTime,
 }) => {
   return (
     <div className="maindis">
@@ -50,8 +50,10 @@ const BottomtoTop = ({
                 <td className="heading-child">{formatDate(single.dob)}</td>
                 <td className="heading-child">{single.phone}</td>
                 <td className="heading-child">
-                  {toGetDateAndTime(single.currDate).istDate   }
-                  <span className="time">{toGetDateAndTime(single.currDate).istTime.slice(0,-3)}</span> 
+                  {toGetDateAndTime(single.currDate).istDate}
+                  <span className="time">
+                    {toGetDateAndTime(single.currDate).istTime.slice(0, -3)}
+                  </span>
                 </td>
                 <td className="heading-child-last">
                   <button className="hcl-child-2">
@@ -86,4 +88,4 @@ const BottomtoTop = ({
   );
 };
 
-export default BottomtoTop;
+export default DataTable;

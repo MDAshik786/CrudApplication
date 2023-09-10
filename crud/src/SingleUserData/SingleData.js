@@ -11,12 +11,10 @@ const SingleData = () => {
   let singleData = location.state;
   const single = singleData;
   const loginId = location.state.loginId;
-  console.log(singleData, "location");
 
   const [deletBollean, setdeletBollean] = useState(false);
   
   function CancelConfirm() {
-    console.log(loginId, "logindelete");
     loginId
       ? nevigate("/display", { state: { loginId: loginId } })
       : nevigate("/", { state: { loginId: loginId } });

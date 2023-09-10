@@ -16,26 +16,26 @@ const Form = ({
   data,
   currentDate1,
   setError,
-  setValidEmail
+  setValidEmail,
 }) => {
   const [visible, setVisible] = useState(false);
 
   const EmailValidation = async (email) => {
     try {
       const response = await axios.post(`${apiUrl}/email/${email}`, email);
-      console.log("new Value--")
+      console.log("new Value--");
       if (response.data === "False") {
         setError((prevState) => ({
           ...prevState,
           email: "Email is Already Exists",
         }));
-        setValidEmail(false)
+        setValidEmail(false);
       } else {
         setError((prevState) => ({
           ...prevState,
           email: "",
         }));
-        setValidEmail(true)
+        setValidEmail(true);
       }
 
       return response.data;
@@ -50,7 +50,7 @@ const Form = ({
   const editEmailValidation = async (id, email) => {
     console.log(`${apiUrl}/${id}/${email}`);
     try {
-      console.log("edit-value")
+      console.log("edit-value");
       const editresponse = await axios.post(`${apiUrl}/${id}/${email}`, email);
       console.log("first");
       if (!editresponse.data) {
@@ -59,7 +59,7 @@ const Form = ({
           ...prevState,
           email: "Email is Already Exists",
         }));
-        setValidEmail(false)
+        setValidEmail(false);
       } else {
         console.log(editresponse.data, "--->>>");
         setError((prevState) => ({
@@ -75,8 +75,8 @@ const Form = ({
     }
   };
   let id;
-  if(data.single || data.singleData)
-   id = data.single ? data.single.id : data.singleData.id
+  if (data.single || data.singleData)
+    id = data.single ? data.single.id : data.singleData.id;
   return (
     <div>
       <form onSubmit={submitAllData}>
@@ -95,10 +95,9 @@ const Form = ({
                   data-testid="email-id"
                   onChange={handleInputChange}
                   onBlur={
-                    (data.single || data.singleData) 
+                    data.single || data.singleData
                       ? () => editEmailValidation(id, formData?.email)
-                      : () =>
-                      EmailValidation(formData?.email)
+                      : () => EmailValidation(formData?.email)
                   }
                 />
                 {Error?.email && (
@@ -116,7 +115,7 @@ const Form = ({
               <label className="input-name">Password:</label>
               <div className="relative">
                 <input
-                    type={visible ? "text" : "password"}
+                  type={visible ? "text" : "password"}
                   className="first-name"
                   placeholder="Enter Your First Name"
                   value={formData?.password}
@@ -124,14 +123,15 @@ const Form = ({
                   data-testid="password-id"
                   onChange={handleInputChange}
                 />
-                 {visible ? (
-                <BiSolidShow className="view1" onClick={visibleHandeler} />
-              ) : (
-                <BsEyeSlashFill className="view1" onClick={visibleHandeler} />
-              )}
+                {visible ? (
+                  <BiSolidShow className="view1" onClick={visibleHandeler} />
+                ) : (
+                  <BsEyeSlashFill className="view1" onClick={visibleHandeler} />
+                )}
                 {Error?.password && (
-                  <p style={{ color: "red", font: "1rem Roboto, sans-serif" }}>
-                  </p>
+                  <p
+                    style={{ color: "red", font: "1rem Roboto, sans-serif" }}
+                  ></p>
                 )}
               </div>
             </div>
@@ -187,8 +187,9 @@ const Form = ({
                   onChange={handleInputChange}
                 />
                 {Error?.dob && (
-                  <p style={{ color: "red", font: "1rem Roboto, sans-serif" }}>
-                  </p>
+                  <p
+                    style={{ color: "red", font: "1rem Roboto, sans-serif" }}
+                  ></p>
                 )}
               </div>
             </div>
@@ -196,7 +197,7 @@ const Form = ({
               <label className="input-name">Phone No:</label>
               <div className="relative">
                 <input
-                  type="text"
+                  type="number"
                   className="phone"
                   placeholder="Enter Your Phone Number"
                   value={formData?.phone}
@@ -245,7 +246,7 @@ const Form = ({
                 className="submite-button"
                 data-testid="submit"
               >
-                {(data.single || data.singleData) ? "Edit Data" : "submit"}
+                {data.single || data.singleData ? "Edit Data" : "submit"}
               </button>
             </div>
             <button className="cancel-button">

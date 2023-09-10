@@ -7,19 +7,15 @@ import { apiUrl } from "../Constrains/URL";
 import { BiSolidShow } from "react-icons/bi";
 import { BsEyeSlashFill } from "react-icons/bs";
 
-
 const Login = ({ logIdn, setlogIdn }) => {
-  const [loginError, setLoginError] = useState({
-  });
+  const [loginError, setLoginError] = useState({});
   const [visible, setVisible] = useState(false);
   const [login, setlogin] = useState({
     email: "",
     password: "",
   });
   const navigate = useNavigate();
-  console.log("first");
   const userLogin = async (email, password) => {
-    console.log("start");
     try {
       const responseLogin = await axios.post(
         `${apiUrl}/login`,
@@ -30,24 +26,27 @@ const Login = ({ logIdn, setlogIdn }) => {
           },
         }
       );
-      console.log(responseLogin.data,"tttttttttttt")
       if (responseLogin.data === "admin") {
         setlogIdn(true);
-        navigate("/display",{state:{loginId:true}});
+        navigate("/display", { state: { loginId: true } });
+      } else if (responseLogin.data === "Incorrect Password")
+        setLoginError((loginError) => ({
+          ...loginError,
+          password: responseLogin.data,
+        }));
+      else if (
+        responseLogin.data === "Incorrect Password" ||
+        responseLogin.data === "Invalid User"
+      )
+        setLoginError((loginError) => ({
+          ...loginError,
+          password: responseLogin.data,
+        }));
+      else {
+        navigate("/single", {
+          state: { singleData: responseLogin.data, loginId: false },
+        });
       }
-      else if(responseLogin.data === 'Incorrect Password')
-      setLoginError((loginError) => ({
-    ...loginError,
-      "password" :responseLogin.data,
-    }))
-    else if(responseLogin.data === 'Incorrect Password' || responseLogin.data === 'Invalid User')
-    setLoginError((loginError) => ({
-  ...loginError,
-    "password" :responseLogin.data,
-  }))
-  else{
-    navigate('/single',{state:{singleData:responseLogin.data,loginId:false}})
-  }
       return responseLogin.data;
     } catch (error) {
       console.log(error);
@@ -60,7 +59,7 @@ const Login = ({ logIdn, setlogIdn }) => {
     const { name, value } = e.target;
     setlogin((prevData) => ({
       ...prevData,
-      [name]: value, 
+      [name]: value,
     }));
     setLoginError((prevState) => {
       const updateData = prevState ? { ...prevState } : {};
@@ -74,35 +73,30 @@ const Login = ({ logIdn, setlogIdn }) => {
     if (login.email === "") {
       Required = false;
       errorValidation.email = "Email is Required";
-    }
-   else if (Required && !emailRegex.test(login.email)) {
+    } else if (Required && !emailRegex.test(login.email)) {
       Incorrect = false;
       errorValidation.email = "Invalid Email";
     }
     if (login.password === "") {
       Required = false;
-      console.log("Password is Required");
       errorValidation.password = "Password Required";
     }
     setLoginError((loginError) => ({
       ["email"]: errorValidation.email,
       ["password"]: errorValidation.password,
-    }) )
-     
-    if (Required && Incorrect){
-     userLogin(login.email, login.password);
-     
+    }));
+
+    if (Required && Incorrect) {
+      userLogin(login.email, login.password);
     }
   }
   function moveToFromPage() {
     setlogIdn(false);
-    navigate("/additem",{state:{loginId:false}});
+    navigate("/additem", { state: { loginId: false } });
   }
   function visibleHandeler() {
     setVisible(!visible);
   }
-  console.log(loginError,"loginError---")
-  console.log(logIdn, "logii");
   return (
     <div className="main-form">
       <div>
@@ -139,13 +133,19 @@ const Login = ({ logIdn, setlogIdn }) => {
               {visible ? (
                 <BiSolidShow className="view-icon1" onClick={visibleHandeler} />
               ) : (
-                <BsEyeSlashFill className="view-icon" onClick={visibleHandeler} />
+                <BsEyeSlashFill
+                  className="view-icon"
+                  onClick={visibleHandeler}
+                />
               )}
             </div>
             <div className="button-class">
               <button className="login-button">LOGIN</button>
               <p className="not-register">
-                Not Registered?/<span className="sign-up"onClick={moveToFromPage}>Sign Up</span>
+                Not Registered?/
+                <span className="sign-up" onClick={moveToFromPage}>
+                  Sign Up
+                </span>
               </p>
             </div>
           </div>

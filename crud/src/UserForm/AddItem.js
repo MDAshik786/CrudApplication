@@ -6,46 +6,18 @@ import { apiUrl } from "../Constrains/URL";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Form from "./Form";
-import {
-  phoneRegex,
-  fnRegex,
-  emailRegex,
-} from "../Validation/Regex";
+import { phoneRegex, fnRegex, emailRegex } from "../Validation/Regex";
 import "./FormMQ.css";
+import { currentDate1 } from "../utils__/DateFormat";
 
 const AddItem = () => {
   const [validEmail, setValidEmail] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const loginId = location.state?.loginId;
-
-  const currentDate = new Date();
-  const hours =
-    currentDate.getHours() < 10
-      ? `0${currentDate.getHours()}`
-      : `${currentDate.getHours()}`;
-  const minutes =
-    currentDate.getMinutes() < 10
-      ? `0${currentDate.getMinutes()}`
-      : `${currentDate.getMinutes()}`;
-  const seconds =
-    currentDate.getSeconds() < 10
-      ? `0${currentDate.getSeconds()}`
-      : `${currentDate.getSeconds()}`;
-
-  let day = currentDate.getDate();
-  let month = currentDate.getMonth() + 1;
-  let year = currentDate.getFullYear();
-
-  if (day < 10) day = `0${day}`;
-  if (month < 10) month = `0${month}`;
-
-  const currentDate1 = `${year}-${month}-${day}`;
-  const currentTime = `${hours}-${minutes}-${seconds}`;
-
   const [formData, setFormData] = useState({
     email: "",
-    password:"",
+    password: "",
     fn: "",
     ln: "",
     dob: "",
@@ -63,37 +35,45 @@ const AddItem = () => {
         const response = await axios.get(apiUrl);
         setApiData(response.data);
       } catch (error) {
-        console.log("Error fetching API data:", error);
       }
     };
     callApiData();
   }, []);
-  console.log(location.state?.loginId,"locatttt")
   useEffect(() => {
-    if ((location.state.single || location.state.singleData)) {
+    if (location.state.single || location.state.singleData) {
       const array = location.state;
-      console.log(location.state.single,location.state,"daaaaa")
       setFormData({
-        email: array.single ? array?.single?.email : array?.singleData?.singleData?.email,
-        password: array.single ? array?.single?.password : array?.singleData?.singleData?.password,
-        fn: array.single ? array?.single?.fn : array?.singleData?.singleData?.fn,
-        ln: array.single ? array?.single?.ln : array?.singleData?.singleData?.ln,
-        dob: array.single ? array?.single?.dob : array?.singleData?.singleData?.dob,
-        phone: array.single ? array?.single?.phone : array?.singleData?.singleData?.phone,
-        address: array.single ? array?.single?.address : array?.singleData?.singleData?.address,
+        email: array.single
+          ? array?.single?.email
+          : array?.singleData?.singleData?.email,
+        password: array.single
+          ? array?.single?.password
+          : array?.singleData?.singleData?.password,
+        fn: array.single
+          ? array?.single?.fn
+          : array?.singleData?.singleData?.fn,
+        ln: array.single
+          ? array?.single?.ln
+          : array?.singleData?.singleData?.ln,
+        dob: array.single
+          ? array?.single?.dob
+          : array?.singleData?.singleData?.dob,
+        phone: array.single
+          ? array?.single?.phone
+          : array?.singleData?.singleData?.phone,
+        address: array.single
+          ? array?.single?.address
+          : array?.singleData?.singleData?.address,
       });
     }
   }, []);
-  console.log(loginId,'loginId');
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value, "nv");
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
     if (name === "email") {
-      console.log("comming....");
       if (value === "") {
         Error.email = "Email is Required";
       } else if (!emailRegex.test(value)) {
@@ -131,7 +111,7 @@ const AddItem = () => {
     if (formData.password === "") {
       error.password = "Password is Required";
       emptyRequirement = false;
-    } 
+    }
     if (formData.fn === "") {
       error.fn = "First Name is Required";
       emptyRequirement = false;
@@ -171,65 +151,60 @@ const AddItem = () => {
     }
     setError((prevState) => ({
       ...prevState,
-      error
-      
+      error,
     }));
-
 
     if (emptyRequirement && validOrNot && allreadyExist && validEmail) {
       if (!data.single && !data.singleData) {
         setAllValue();
       } else {
-        const id = (data?.single) ? data?.single?.id : data?.singleData.singleData.id
-        console.log(id,"id")
+        const id = data?.single
+          ? data?.single?.id
+          : data?.singleData.singleData.id;
         editUserDetails(id);
       }
     }
   };
   const getSingleData = async (email) => {
     const response = await axios.get(`${apiUrl}/identify/${email}`);
-    console.log(response.data,"rs")
-    navigate("/single", { state: { singleData: response.data, loginId: loginId } })
-     return response.data
-  }
+    navigate("/single", {
+      state: { singleData: response.data, loginId: loginId },
+    });
+    return response.data;
+  };
   const setAllValue = async () => {
     await axios.post(apiUrl, {
       email: formData.email,
-      password:formData.password,
+      password: formData.password,
       fn: formData.fn,
       ln: formData.ln,
       dob: formData.dob,
       phone: formData.phone,
       address: formData.address,
     });
-    !loginId ? getSingleData(formData.email) : navigate("/display",{state:{loginId}})
-    console.log(`${apiUrl}/${formData.email}`)
-  
-    console.log("Added");
-    
+    !loginId
+      ? getSingleData(formData.email)
+      : navigate("/display", { state: { loginId } });
   };
-  console.log(data, "first");
   const getEditSingleData = async (email) => {
     const response = await axios.get(`${apiUrl}/identify/${email}`);
-    console.log(response.data,"editrs------")
-    navigate("/single", { state: { singleData: response.data, loginId: loginId } })
-     return response.data
-  }
+    navigate("/single", {
+      state: { singleData: response.data, loginId: loginId },
+    });
+    return response.data;
+  };
   const editUserDetails = async (id) => {
     try {
-      console.log("new edit",formData);
       const response = await axios.put(`${apiUrl}/${id}`, {
         email: formData.email,
-        password : formData.password,
+        password: formData.password,
         fn: formData.fn,
         ln: formData.ln,
         dob: formData.dob,
         address: formData.address,
         phone: formData.phone,
       });
-      console.log(response.data, "edit----");
       if (response.data === false) {
-        console.log(response.data, "=---error");
         setError((prevState) => ({
           ...prevState,
           email: "Email is Already Exists",
@@ -240,22 +215,22 @@ const AddItem = () => {
           email: "",
         }));
       }
-      if(loginId){
-        navigate("/display",{state:{loginId:loginId}})
+      if (loginId) {
+        navigate("/display", { state: { loginId: loginId } });
+      } else {
+        getEditSingleData(formData.email);
       }
-      else{
-        getEditSingleData(formData.email)
-      }
-      loginId ? navigate("/display",{state:{loginId:loginId}}) : navigate("/single",{state:{loginId:loginId}});
+      loginId
+        ? navigate("/display", { state: { loginId: loginId } })
+        : navigate("/single", { state: { loginId: loginId } });
     } catch (error) {
-      console.error("Error updating user details:", error);
     }
   };
 
   function clearAllData() {
     setFormData({
       email: "",
-      password:"",
+      password: "",
       fn: "",
       ln: "",
       dob: "",
@@ -264,22 +239,15 @@ const AddItem = () => {
     });
   }
   function Cancel() {
-    console.log(location.state.singleData,"singledata")
-    if(loginId)
-    navigate("/display",{state:{loginId:loginId}})
-  else {
-    console.log(location.state?.singleData,"ashikkkkk")
-    if(location.state.singleData){
-    console.log(location.state?.singleData,"ashik")
-    navigate("/single",{state:{singleData:location.state.singleData.singleData,loginId}})
+    if (loginId) navigate("/display", { state: { loginId: loginId } });
+    else {
+      if (location.state.singleData) {
+        navigate("/single", {
+          state: { singleData: location.state.singleData.singleData, loginId },
+        });
+      } else navigate("/");
     }
-  else 
-  navigate("/")
   }
-    
-  }
-  console.log(Error, "error");
-  console.log(validEmail,"validEamil")
   return (
     <main className="main">
       <MainLayout>
@@ -293,7 +261,7 @@ const AddItem = () => {
           currentDate1={currentDate1}
           data={data}
           setError={setError}
-          setValidEmail = {setValidEmail}
+          setValidEmail={setValidEmail}
         />
       </MainLayout>
     </main>

@@ -1,27 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Headland+One&family=Open+Sans&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
-/* #360033  #0b8793 */
-.div{
-    background-image: linear-gradient(
-        to right,
-        #0b8793,
-        rgba(185, 0, 255, 0.5)
-      ),
-      url("/public/images/download.jpeg");
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-      
-    height: 100vh;
+.div {
+    background-image: linear-gradient(to right,
+            #0b8793,
+            rgba(185, 0, 255, 0.5)),
+        url("/public/images/download.jpeg");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
+
 .main-container {
 
-   
+
     display: flex;
     justify-content: center;
     padding-top: 1rem;
-    
+
 }
 
 .sub-container {
@@ -34,7 +30,7 @@
     gap: 1.5rem;
     box-shadow: #e1adde 10px 30px 60px -12px inset,
         #0b8793 0px 18px 36px -18px inset;
-   
+
 }
 
 .container {
@@ -45,17 +41,17 @@
     width: 95%;
     height: auto;
     padding: 0.5rem 3rem;
-    background-color:#e3f2f4;
+    background-image: linear-gradient(to right, #d1f6fa, #fcdafb);
     align-items: start;
     white-space: nowrap;
     border-radius: 1rem;
 }
 
 .heading {
-   
+
     padding: 2rem 2rem 2rem 0;
     font: 2.4rem 'Headland One', serif;
-    
+
 }
 
 .content1 {
@@ -81,7 +77,8 @@
     opacity: 1;
 }
 
-.contents,.content {
+.contents,
+.content {
     font: 1.5rem 'Headland One', serif;
     text-align: start;
     padding-top: 1rem;
@@ -90,10 +87,12 @@
 .buttons {
     padding: 2rem 0 3rem 0;
 }
-.submite-button3{
-    background-color:#50d2de;
+
+.submite-button3 {
+    background-color: #50d2de;
 }
-.inner-name{
+
+.inner-name {
     color: #360033;
     font: 2.4rem 'Headland One', serif;
 }

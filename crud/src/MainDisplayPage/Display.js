@@ -4,17 +4,19 @@ import axios from "axios";
 import { apiUrl } from "../Constrains/URL";
 import { useLocation, useNavigate } from "react-router-dom";
 import ToptoBottom from "./ToptoBottom";
-import SearchBar from "../SearchBar/SearchBar.js";
-import BottomtoTop from "./BottomtoTop";
+import PageAndSearch from "../PageNation-SearchBar/PageAndSearch";
+import BottomtoTop from "./DataTable";
 
 const Display = () => {
+
   const [apiData, setapiData] = useState("");
   const [search, setSearch] = useState("");
   const [Deleteid, setDeleteid] = useState("");
   const [arrow, setarrow] = useState(true);
+  const [deleteConfirm , setDeleteConfirm] = useState(false);
+ 
   const location = useLocation();
   const loginId = location?.state?.loginId
-  console.log(location.state,location.state.loginId,"location")
   const callApiDataa = async () => {
     const data = await axios.get(apiUrl);
     setapiData(data.data);
@@ -30,27 +32,23 @@ const Display = () => {
   }, []);
 
   function CancelConform() {
-    const deleteContainer = document.querySelector(".delete-container");
-    deleteContainer.style.opacity = "0";
+    setDeleteConfirm(false)
   }
 
   function deleteStart(id) {
-    const deleteContainer = document.querySelector(".delete-container");
-    deleteContainer.style.opacity = "1";
     setDeleteid(id);
+    setDeleteConfirm(true)
   }
 
 
   const deleteValue = async (id) => {
     await axios.delete(`${apiUrl}/${id}`);
     callApiDataa();
-    const deleteContainer = document.querySelector(".delete-container");
-    deleteContainer.style.opacity = "0";
+    setDeleteConfirm(false)
   };
   const nevigate = useNavigate();
 
   const editValue = async (single) => {
-    console.log(single, "single");
     nevigate("/additem", { state: { single,loginId:loginId } });
   };
 
@@ -58,7 +56,6 @@ const Display = () => {
     setarrow(!arrow);
   }
 
-  console.log(apiData, "API Data");
   if (!apiData) {
     return (
       <p className="gif">
@@ -115,17 +112,23 @@ const Display = () => {
     
     return { istDate, istTime };
   }
-
   return (
     <main className="main-con">
-      <SearchBar
+      <PageAndSearch
         arrow={arrow}
         arrowFunction={arrowFunction}
         search={search}
         setSearch={setSearch}
+        lastTenApiData={lastTenApiData}
+        editValue={editValue}
+        deleteStart={deleteStart}
+        moveToSingleData={moveToSingleData}
+        formatDate={formatDate}
+        toGetDateAndTime = {toGetDateAndTime}
       />
       <div className="maindis-1">
-        <div className="delete-parent">
+
+       {deleteConfirm ? (<div className="delete-parent">
           <div className="delete-container">
             <p className="content">
               Are you sure you want to confirm the deletion of details
@@ -148,30 +151,9 @@ const Display = () => {
             </div>
           </div>
         </div>
-
-        {arrow ? (
-          <BottomtoTop
-            lastTenApiData={lastTenApiData}
-            editValue={editValue}
-            deleteStart={deleteStart}
-            moveToSingleData={moveToSingleData}
-            arrow={arrow}
-            formatDate={formatDate}
-            arrowFunction={arrowFunction}
-            toGetDateAndTime = {toGetDateAndTime}
-          />
-        ) : (
-          <ToptoBottom
-            lastTenApiData={lastTenApiData}
-            editValue={editValue}
-            deleteStart={deleteStart}
-            formatDate={formatDate}
-            moveToSingleData={moveToSingleData}
-            arrow={arrow}
-            arrowFunction={arrowFunction}
-            toGetDateAndTime = {toGetDateAndTime}
-          />
-        )}
+        ) : ''
+}
+      
       </div>
     </main>
   );
