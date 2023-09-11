@@ -24,7 +24,9 @@ const AddItem = () => {
     phone: "",
     address: "",
   });
-  const [Error, setError] = useState([]);
+  const [Error, setError] = useState({
+    email:''
+  });
   const [apiData, setApiData] = useState([]);
 
   const data = location.state;
@@ -101,6 +103,9 @@ const AddItem = () => {
     emptyRequirement = true;
     allreadyExist = true;
     validOrNot = true;
+    if(Error.email !== '')
+    error.email = Error.email;
+  else{
     if (formData.email === "") {
       error.email = "Email is Required";
       emptyRequirement = false;
@@ -108,6 +113,7 @@ const AddItem = () => {
       error.email = "Please Enter a Valid Email";
       validOrNot = false;
     }
+  }
     if (formData.password === "") {
       error.password = "Password is Required";
       emptyRequirement = false;
@@ -149,10 +155,11 @@ const AddItem = () => {
       error.address = "Character Limit is 50 only";
       validOrNot = false;
     }
-    setError((prevState) => ({
-      ...prevState,
-      error,
-    }));
+    // setError((prevState) => ({
+    //   ...prevState,
+    //    error,
+    // }));
+    setError(error);
 
     if (emptyRequirement && validOrNot && allreadyExist && validEmail) {
       if (!data.single && !data.singleData) {

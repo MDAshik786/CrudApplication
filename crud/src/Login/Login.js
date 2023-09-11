@@ -39,7 +39,7 @@ const Login = ({ logIdn, setlogIdn }) => {
         responseLogin.data === "Invalid User"
       )
         setLoginError((loginError) => ({
-          ...loginError,
+          ...loginError,  
           password: responseLogin.data,
         }));
       else {
@@ -97,6 +97,9 @@ const Login = ({ logIdn, setlogIdn }) => {
   function visibleHandeler() {
     setVisible(!visible);
   }
+  function moveToForgetPage(){
+    navigate("/resetPassword")
+  }
   return (
     <div className="main-form">
       <div>
@@ -129,6 +132,7 @@ const Login = ({ logIdn, setlogIdn }) => {
                 onChange={handelLoginForm}
                 autoComplete="off"
               ></input>
+              <p className="forget" onClick={moveToForgetPage}>Forget Password?</p>
               <p className="error-message">{loginError?.password}</p>
               {visible ? (
                 <BiSolidShow className="view-icon1" onClick={visibleHandeler} />
@@ -139,6 +143,7 @@ const Login = ({ logIdn, setlogIdn }) => {
                 />
               )}
             </div>
+            
             <div className="button-class">
               <button className="login-button">LOGIN</button>
               <p className="not-register">

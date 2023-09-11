@@ -77,6 +77,7 @@ const Form = ({
   let id;
   if (data.single || data.singleData)
     id = data.single ? data.single.id : data.singleData.id;
+  console.log(Error)
   return (
     <div>
       <form onSubmit={submitAllData}>
@@ -131,7 +132,7 @@ const Form = ({
                 {Error?.password && (
                   <p
                     style={{ color: "red", font: "1rem Roboto, sans-serif" }}
-                  ></p>
+                  >{Error.password}</p>
                 )}
               </div>
             </div>
@@ -171,7 +172,7 @@ const Form = ({
                   <p style={{ color: "red", font: "1rem Roboto, sans-serif" }}>
                     {Error?.ln}
                     <BsFillInfoCircleFill className="info-icon" />
-                  </p>
+                  aaaa</p>
                 )}
               </div>
             </div>
@@ -189,7 +190,7 @@ const Form = ({
                 {Error?.dob && (
                   <p
                     style={{ color: "red", font: "1rem Roboto, sans-serif" }}
-                  ></p>
+                  >{Error.dob}</p>
                 )}
               </div>
             </div>

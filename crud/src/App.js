@@ -6,6 +6,7 @@ import AddItem from "./UserForm/AddItem";
 import Login from "./Login/Login";
 import { useState } from "react";
 import ResetPassword from "./Login/ResetPassword";
+import SetPassword from "./Login/SetPassword";
 
 function App() {
   const [logIdn, setlogIdn] = useState(false);
@@ -29,7 +30,11 @@ function App() {
     },
     {
       path: "/resetPassword",
-      element: <ResetPassword/>,
+      element: <SetPassword/>,
+    },
+    {
+      path: "/setPassword",
+      element: <SetPassword/>,
     }
   ]);
   return (

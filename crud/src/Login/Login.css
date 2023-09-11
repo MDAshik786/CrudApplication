@@ -9,9 +9,14 @@
   background-size: cover;
 }
 
-.error-msg {
-  padding-top: 0.1rem;
+.error-message {
+  padding-top: 0.3rem;
+  padding-right: 0.4rem;
+  position: absolute;
+  top: 3.5rem;
+  left: 1rem;
 }
+
 
 .form-data {
   display: flex;
@@ -173,4 +178,15 @@
   font-size: 1.1rem;
   cursor: pointer;
 
+}
+.forget{
+  text-align: end;
+  padding: 0.6rem 0.4rem 0 0rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.forget:hover,.forget:active{
+  opacity: 0.7;   
+  
 }
